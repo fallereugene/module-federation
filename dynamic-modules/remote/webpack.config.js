@@ -1,12 +1,15 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const pkg = require("./package.json");
+
+const { dependencies } = pkg;
 
 module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.join(__dirname, "/dist"),
-    filename: "index-bundle.js",
+    filename: "[name].bundle.js",
   },
   module: {
     rules: [
@@ -29,12 +32,11 @@ module.exports = {
         "./RemoteApplication": "./src/components/app.js",
       },
       shared: {
+        ...dependencies,
         react: {
-          eager: true,
           singleton: true,
         },
         "react-dom": {
-          eager: true,
           singleton: true,
         },
       },
